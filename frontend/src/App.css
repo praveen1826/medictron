@@ -1,0 +1,128 @@
+/* #container {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: #7b66ff;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  overflow: auto;
+} */
+/*
+@media (max-width: 768px) {
+  #container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: #7b66ff;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    overflow: auto;
+  }
+  #title {
+    display: flex;
+    align-self: center;
+    color: #96efff;
+    font-family: "Concert One", sans-serif;
+    text-align: center;
+    overflow: auto;
+    font-size: medium;
+  }
+  #chat {
+    display: flex;
+    background-color: #7b66ff;
+    overflow: auto;
+    flex-direction: row;
+  }
+  #chat_history_container {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    overflow: auto;
+    margin-left: 2vw;
+    margin-top: 1vh;
+    border: 5px solid black;
+  }
+
+  #chat_history_heading {
+    display: none;
+  }
+
+  #chat_container {
+    display: inline-block;
+    vertical-align: top;
+    width: 95vw;
+    height: 88vh;
+    margin-left: 1vw;
+    border: 5px solid black;
+  }
+}
+@media (min-width: 768px) {
+  #container {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    background-color: #7b66ff;
+    overflow: auto;
+    flex-direction: column;
+  }
+  #title {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: #96efff;
+    font-family: "Concert One", sans-serif;
+    text-align: center;
+    flex: 0.65;
+  }
+  #chat {
+    display: flex;
+    justify-content: center;
+    background-color: #7b66ff;
+    overflow: auto;
+    flex-direction: row;
+    flex: 9.35;
+    gap: 10px;
+  }
+
+  #chat_history_container {
+    display: flex;
+    overflow: hidden;
+    margin-left: 1vw;
+    margin-bottom: 1vh;
+    border: 5px solid black;
+    flex: 1;
+  }
+  #chat_heading_container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 7vh;
+    width: 100%;
+    border: 5px solid rgb(154, 78, 78);
+  }
+  #chat_history_heading {
+    margin-left: 1vw;
+  }
+  #chat_img {
+    float: left;
+    height: 20px;
+    width: 20px;
+  }
+
+  #chat_container {
+    display: flex;
+    border: 5px solid black;
+    margin-right: 1vw;
+    margin-bottom: 1vh;
+    flex: 3;
+  }
+} */
