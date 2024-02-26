@@ -8,15 +8,18 @@ function Input() {
 
   async function postMessage(message: any) {
     try {
-      const response = await axios.post("http://localhost:8000/chat", {
+      const data = await axios.post("http://localhost:8000/chat", {
         message,
       });
-      console.log(response.data);
+
+      const response = JSON.stringify(data.data);
+
+      console.log(response);
       // console.log(response.data.output.output);
       dispatch({
         type: "added",
         id: nextId++,
-        text: "Medtronic: " + response.data.output.content,
+        text: "Medtronic: " + JSON.parse(response).output.content,
       });
     } catch (error) {
       console.error(error);
@@ -43,7 +46,7 @@ function Input() {
       >
         <input
           type="text"
-          className="form-control me-2"
+          className="form-control form-control-lg me-2"
           id="chatMessage"
           aria-describedby="messageHelp"
           placeholder="Enter your message here"

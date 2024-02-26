@@ -32,7 +32,7 @@ class Parkinson():
         'spread2': 0.266482,
         'D2': 2.301442,
         'PPE': 0.284654
-        } and returns parkinson(1) or not(0)"""
+        } and returns parkinson(1) or not(0), 1->present , 0->not present"""
 
         query = ast.literal_eval(query)
 

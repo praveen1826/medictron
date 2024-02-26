@@ -15,12 +15,15 @@ function Chat() {
             AI Assistant For Medical Diagnosis Using Large Language Models
           </h1>
         </div>
-        <div id="chat" className="row gx-2 d-flex justify-content-center m-3">
+        <div
+          id="chat"
+          className="row gx-2 d-flex justify-content-center m-md-3 m-2 "
+        >
           <ChatHistory />
 
           <div
             id="chat_container"
-            className="d-flex col-md-8 col-10 border ms-2 overflow-hidden"
+            className="d-flex col-md-8 col-12 border ms-2 overflow-hidden"
           >
             <div className="d-md-none position-absolute border">
               <svg

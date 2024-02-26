@@ -52,8 +52,8 @@ agent_executor = AgentExecutor(agent=agent,
                                verbose=True
                                )
 
-output = agent_executor.invoke(
-    {"input": "if you know answer no need to use tool just directly answer using Final Answer Q:what is an llm?"})
+# output = agent_executor.invoke(
+#     {"input": "if you know answer no need to use tool just directly answer using Final Answer Q:what is an llm?"})
 
 
 # class Item(BaseModel):
@@ -65,12 +65,12 @@ async def chat_endpoint(request: Request):
     body = await request.json()
     print(body)
     output = agent_executor.invoke(
-        {"input": "use tool and detect has disease present or not " + body["message"]})
+        {"input": "use tool and tell if disease is present or disease is not present" + body["message"]})
     print(output)
     answer = llm.invoke(
-        """If the test result is 1, it indicates a likelihood of specified disease. 
-        However, if the result is not 1, it suggests the absence of specified indicators., 
-        disease test results:""" + str(output['output']))
+        """Assist the user by replying appropriately ,If the test result is 1/yes/present , it indicates a likelihood of specified disease. 
+        However, if the result is not 1/no/not present , it suggests the absence of specified indicators., 
+        disease test results:""" + str(output['output']) + " Assistant:")
     return {"output": answer}
 
 # for chunk in agent_executor.stream({"input": "if you know answer no need to use tool just directly answer using Final Answer Q:what is machine learning write in 200 words?"}):
