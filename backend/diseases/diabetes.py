@@ -7,7 +7,7 @@ import ast
 
 class Diabetes():
 
-    @tool
+    @tool(return_direct=True)
     def diabetes(query: str) -> str:
         """Takes in a dictionary of key value pairs in this order {
         'Pregnancies': 6,
@@ -35,4 +35,4 @@ class Diabetes():
 
         output = Best_model.predict(sc.fit_transform([test_value]))
 
-        return "diabetes" + str(output)
+        return "diabetes =" + str(output)

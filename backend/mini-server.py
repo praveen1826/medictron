@@ -1,20 +1,14 @@
-from langchain.agents import tool
 from dotenv import load_dotenv
-# from langchain_google_genai.llms import GoogleGenerativeAI
-from langchain_google_genai.chat_models import ChatGoogleGenerativeAI
 from langchain_community.llms.llamacpp import LlamaCpp
-from langchain import hub
-from langchain.agents import AgentExecutor, create_react_agent, tool
+from langchain.schema import StrOutputParser
+from langchain.prompts import ChatPromptTemplate
 from langchain.globals import set_debug
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 import pickle
 import ast
-from diseases.parkinson import Parkinson
-from diseases.diabetes import Diabetes
 
 
 load_dotenv()
@@ -23,7 +17,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Allows CORS for your React app
+    allow_origins=["*"],  # Allows CORS for your React app
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,14 +27,23 @@ set_debug(True)
 
 
 llm = LlamaCpp(
-    model_path=r"C:\Users\thiru\Documents\apps\ai_models\Gen_AI\Text_Gen\llama-2-7b-chat.Q8_0.gguf",
+    model_path=r"C:\Users\thiru\Documents\apps\ai_models\Gen_AI\Text_Gen\mistral-7b-v0.1.Q8_0.gguf",
     temperature=0.75,
     max_tokens=50,
     top_p=1,
     verbose=True,
 )
 
-llm.bind(stop=["User:", "Human:", "\n", "/n", "?\n", "Assistant:"])
+template = """Assist the user by replying appropriately ,
+        If the test result is 1 , it indicates a likelihood of specified disease. 
+        However, if the result is 0 , it suggests the absence of specified indicators., 
+        disease test results: {output} " Assistant:"""
+
+prompt = ChatPromptTemplate.from_template(template=template)
+
+
+chain = prompt | llm.bind(
+    stop=["User:", "Human:", "Assistant:", "Assistant: ", "\n"]) | StrOutputParser()
 
 
 def parkinson(query: str) -> str:
@@ -70,7 +73,37 @@ def parkinson(query: str) -> str:
 
     output = LR_model.predict(sc.fit_transform([test_value]))
 
-    return "parkinson" + str(output)
+    return "parkinson = " + str(output)
+
+
+def diabetes(query: str) -> str:
+    """Takes in a dictionary of key value pairs in this order {
+        'Pregnancies': 6,
+        'Glucose': 148,
+        'BloodPressure': 72,
+        'SkinThickness': 35,
+        'Insulin': 0,
+        'BMI': 33.6,
+        'DiabetesPedigreeFunction': 0.627,
+        'Age': 50
+        } and returns diabetes(1) or not(0)"""
+
+    query = ast.literal_eval(query)
+
+    values = [float(value) for value in query.values()]
+
+    # Convert the list of values to a numpy array and store it in 'test_value'
+    test_value = np.array(values)
+    sc = StandardScaler()
+
+    best_model = "models/diabetes/Diabetes_AdaBoostClassifier_model.pkl"
+
+    with open(best_model, 'rb') as file:
+        Best_model = pickle.load(file)
+
+    output = Best_model.predict(sc.fit_transform([test_value]))
+
+    return "diabetes = " + str(output)
 
 
 def extract_dict(s):
@@ -81,18 +114,35 @@ def extract_dict(s):
     return str(dictionary)
 
 
+def contains_parkinson(sentence):
+    return "parkinson" in sentence.lower()
+
+
+def contains_diabetes(sentence):
+    return "diabetes" in sentence.lower()
+
+
 @app.post("/chat")
 async def chat_endpoint(request: Request):
     body = await request.json()
     print(body)
     input = body['message']
 
-    output = parkinson(extract_dict(input))
+    if (contains_parkinson(input)):
+        output = parkinson(extract_dict(input))
+
+    elif (contains_diabetes(input)):
+        output = diabetes(extract_dict(input))
+
+    else:
+        try:
+            output = diabetes(extract_dict(input))
+        except ValueError:
+            output = parkinson(extract_dict(input))
+
     temp = ""
 
-    for chunk in llm.stream("""Assist the user by replying appropriately ,If the test result is 1 , it indicates a likelihood of specified disease. 
-        However, if the result is 0 , it suggests the absence of specified indicators., 
-        disease test results:""" + str(output) + " Assistant:"):
+    for chunk in chain.stream({"output": str(output)}):
         print(chunk, end="", flush=True)
         temp += chunk
 
