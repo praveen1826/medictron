@@ -53,7 +53,7 @@ function messageReducer(messages: Message[], action: Action): Message[] {
 const initialMessage: Message[] = [
   {
     id: 0,
-    text: "Medtronic: Hello, Please Enter your disease details",
+    text: "Medictron: Hello, Please Enter your disease details",
     done: true,
   },
 ];

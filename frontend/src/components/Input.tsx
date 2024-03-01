@@ -19,7 +19,7 @@ function Input() {
       dispatch({
         type: "added",
         id: nextId++,
-        text: "Medtronic: " + JSON.parse(response).output.content,
+        text: "Medictron: " + JSON.parse(response).output.content,
       });
     } catch (error) {
       console.error(error);
